@@ -1,0 +1,94 @@
+cabal-version:      3.0
+name:               gen
+version:            0.0.1
+synopsis:           Generate Nix contributors
+homepage:           https://github.com/nixos/sc-election-2025
+license:            Apache-2.0
+license-file:       LICENCE.md
+author:             ners
+maintainer:         ners@gmx.ch
+category:           System
+build-type:         Simple
+
+common common
+    default-language: GHC2021
+    ghc-options:
+        -Weverything
+        -Wno-all-missed-specialisations
+        -Wno-missing-export-lists
+        -Wno-missing-import-lists
+        -Wno-missing-safe-haskell-mode
+        -Wno-unsafe
+        -Wno-missing-kind-signatures
+    if impl(ghc >= 9.8)
+        ghc-options:
+            -Wno-missing-poly-kind-signatures
+            -Wno-missing-role-annotations
+    build-depends:
+        base,
+    default-extensions:
+        ApplicativeDo
+        Arrows
+        BlockArguments
+        DataKinds
+        DefaultSignatures
+        DeriveAnyClass
+        DeriveGeneric
+        DerivingStrategies
+        DerivingVia
+        ExplicitNamespaces
+        LambdaCase
+        NoFieldSelectors
+        NoImplicitPrelude
+        OverloadedLabels
+        OverloadedRecordDot
+        OverloadedStrings
+        PackageImports
+        RecordWildCards
+        RecursiveDo
+        StrictData
+        TypeFamilies
+        ViewPatterns
+
+executable gen
+    import:           common
+    hs-source-dirs:   gen
+    ghc-options:      -threaded
+    main-is:          Main.hs
+    other-modules:
+        Config,
+        Contributor,
+        Log,
+        PullRequests,
+        Query,
+        Repositories,
+        Response,
+    build-depends:
+        aeson,
+        async-pool,
+        bytestring,
+        containers,
+        extra,
+        file-embed,
+        hashable,
+        http-types,
+        lens,
+        optparse-applicative,
+        pretty-simple,
+        stm,
+        text,
+        time,
+        unordered-containers,
+        wreq,
+
+executable emails
+    import:           common
+    hs-source-dirs:   emails
+    ghc-options:      -threaded
+    main-is:          Main.hs
+    other-modules:
+    build-depends:
+        aeson,
+        containers,
+        text,
+        scientific,
