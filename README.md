@@ -1,4 +1,4 @@
-Nix SC election 2025
+Nix SC election 2026
 =======================
 
 ## Who can vote?
@@ -50,34 +50,43 @@ After the question has been posted, only candidates and nominees can respond to 
 
 | Description             | Start date              | End date                |
 | ----------------------- | ----------------------- | ----------------------- |
-| Contribution window     | 2021-08-01T00:00:01 UTC | 2025-08-01T00:00:01 UTC |
-| Candidate self-nominations, nominations, acceptances, and endorsements | 2025-09-14 | 2025-09-30 |
-| Submission of questions from eligible voters to candidates | 2025-09-14 | 2025-10-03 |
-| Exception requests      | 2025-09-14              | 2025-10-11              |
-| Candidates' answers to the questions | 2025-09-14 | 2025-10-11              |
-| Voter registration (for inclusion in the initial OpaVote upload)      | 2025-09-14              | 2025-10-14              |
-| Voting                  | 2025-10-15              | 2025-11-01              |
+| Contribution window     | 2022-08-01T00:00:01 UTC | 2026-08-01T00:00:01 UTC |
+| Candidate self-nominations, nominations, acceptances, and endorsements | 2026-09-14 | 2026-09-30 |
+| Submission of questions from eligible voters to candidates | 2026-09-14 | 2026-10-03 |
+| Exception requests      | 2026-09-14              | 2026-10-11              |
+| Candidates' answers to the questions | 2026-09-14 | 2026-10-11              |
+| Voter registration (for inclusion in the initial OpaVote upload)      | 2026-09-14              | 2026-10-14              |
+| Voting                  | 2026-10-15              | 2026-11-01              |
 
 We will make an effort to regularly, once per 3 days or more often, upload the later registrations to OpaVote, but this will be manual and not in real time»
 
-Voting end date is 2025-11-01 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
-This means if your (local) clock shows 2025-11-01 or an earlier date you can still vote.
-If your (local) clock shows 2025-11-02 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
+Voting end date is 2026-11-01 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
+This means if your (local) clock shows 2026-11-01 or an earlier date you can still vote.
+If your (local) clock shows 2026-11-02 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
 
 [^timezone-command]: `env TZ=Etc/GMT+12 date --rfc-3339=s` will give you the relvevant AoE time and date.
-As long as *the date portion* still displays 2025-11-01 or earlier this means you can still vote.
-Any time left before the following day (2025-11-02) is the time left for voting.
+As long as *the date portion* still displays 2026-11-01 or earlier this means you can still vote.
+Any time left before the following day (2026-11-02) is the time left for voting.
 
 ## Election Committee (EC)
 
 The EC is the temporary team to administer the election from start to finish. Its primary mission is to ensure legitimacy of the election.
 
 The election committee for this election consists of:
-- @ners
-- @7c6f434c
-- @RossComputerGuy
+- [@ners](https://github.com/ners)
+- [@RossComputerGuy](https://github.com/RossComputerGuy)
+- [@iamanaws](https://github.com/iamanaws)
+
+This year sees the introduction of the Standing EC.
+The purpose of the standing EC is to facilitate a quick formation of an EC in the event of either regular or special elections.
+From a pool of all its members, a 3-member EC can quickly be formed and announced, kicking off the process.
+The EC can ask for assistance from the Standing EC as needed.
+
+The Standing EC consists of the EC members above, in addition to:
+- [@ethancedwards8](https://github.com/ethancedwards8)
+- [@trespaul](https://github.com/trespaul)
 
 For any questions, concerns or suggestions about this election, reach out to the election committee:
 - by email: elections@nixos.org
-- on GitHub: ping [@NixOS/ec-2025](https://github.com/orgs/NixOS/teams/ec-2025)
+- on GitHub: ping [@NixOS/ec-2026](https://github.com/orgs/NixOS/teams/ec-2026)
 - on Matrix: [#sc-elections:nixos.org](https://matrix.to/#/#sc-elections:nixos.org)

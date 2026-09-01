@@ -3,7 +3,7 @@
 If your email address in [`eligible.csv`](../eligible.csv) is missing or wrong,
 you won't be able to vote.
 
-Please set your email before [the deadline](../README.md#timeline).
+Please check your email before [the deadline](../README.md#timeline).
 
 To set or update your voter email address:
 1. Set or change the email address for your entry by editing the file,
