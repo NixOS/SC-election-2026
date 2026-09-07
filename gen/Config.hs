@@ -22,7 +22,7 @@ parserInfo :: ParserInfo Config
 parserInfo =
     info
         (helper <*> parseConfig)
-        (fullDesc <> progDesc "NixOS Steering Committee election contributor list generator")
+        (fullDesc <> progDesc "NixOS automatic election eligibility list generator")
 
 getConfig :: IO Config
 getConfig = execParser parserInfo
