@@ -51,11 +51,10 @@ After the question has been posted, only candidates and nominees can respond to 
 | Description             | Start date              | End date                |
 | ----------------------- | ----------------------- | ----------------------- |
 | Contribution window     | 2022-08-01T00:00:01 UTC | 2026-08-01T00:00:01 UTC |
-| Candidate self-nominations, nominations, acceptances, and endorsements | 2026-09-14 | 2026-09-30 |
-| Submission of questions from eligible voters to candidates | 2026-09-14 | 2026-10-03 |
-| Exception requests      | 2026-09-14              | 2026-10-11              |
-| Candidates' answers to the questions | 2026-09-14 | 2026-10-11              |
-| Voter registration (for inclusion in the initial OpaVote upload)      | 2026-09-14              | 2026-10-14              |
+| Candidate self-nominations, nominations, acceptances, and endorsements | 2026-09-24 | 2026-10-14 |
+| Submission of questions from eligible voters to candidates | 2026-09-24 | 2026-10-14 |
+| Exception requests      | 2026-09-24              | 2026-10-14              |
+| Candidates' answers to the questions | 2026-09-24 | 2026-10-14              |
 | Voting                  | 2026-10-15              | 2026-11-01              |
 
 We will make an effort to regularly, once per 3 days or more often, upload the later registrations to OpaVote, but this will be manual and not in real time»
