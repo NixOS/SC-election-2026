@@ -1,0 +1,138 @@
+name: Update voter team
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    # Prevent infinite loops when this action pushes commits
+    paths-ignore:
+      - invited.csv
+
+# This workflow changes state, we shouldn't run multiple at the same time!
+concurrency:
+  group: ${{ github.workflow }}
+  # Canceling could leave us in a bad state
+  cancel-in-progress: false
+
+jobs:
+  update-voter-team:
+    runs-on: ubuntu-latest
+    name: Update voter team
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.head_ref }}
+      - name: Update team
+        run: |
+          list() {
+            echo "Listing all members of the team" >&2
+            if ! response=$(gh api \
+              --paginate \
+              -H "Accept: application/vnd.github+json" \
+              "/orgs/$ORG/teams/$VOTER_TEAM/members?per_page=100"); then
+              echo "$response" >&2
+              return 1
+            fi
+
+            jq -r '.[].id' <<< "$response"
+          }
+
+          loginFor() {
+            local id=$1
+            echo "Getting login for user id $id" >&2
+            if ! response=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/user/$id"); then
+              echo "$response" >&2
+              return 1
+            fi
+            jq -r .login <<< "$response"
+          }
+
+          invitedFile=invited.csv
+
+          add() {
+            local id=$1
+            local login
+            if ! login=$(loginFor "$id"); then
+              echo "User with id $id does not exist anymore, cannot add to the team" >&2
+              return 1
+            fi
+            echo "Adding user with id $id and login $login to team $VOTER_TEAM" >&2
+            if ! response=$(gh api \
+              --method PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/orgs/$ORG/teams/$VOTER_TEAM/memberships/$login?role=member"); then
+              echo "$response" >&2
+              return 1
+            fi
+            state=$(jq -r .state <<< "$response")
+            case "$state" in
+              active)
+                echo "User was already part of the organisation, added to the team successfully" >&2
+                ;;
+              pending)
+                echo "User was not part of the organisation, sent an invite to join both the organisation and the team" >&2
+                ;;
+            esac
+            echo "$id" >> "$invitedFile"
+          }
+
+          remove() {
+            local id=$1
+            local login
+            login=$(loginFor "$id")
+            echo "Removing user with id $id and login $login" >&2
+            if ! response=$(gh api \
+              --method DELETE \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/orgs/$ORG/teams/$VOTER_TEAM/memberships/$login"); then
+              echo "$response" >&2
+              return 1
+            fi
+            sed --in-place "/^$/d" "$invitedFile"
+          }
+
+          tmp=$(mktemp -d)
+          trap 'rm -rf "$tmp"' exit
+
+          tail -n+2 eligible.csv | cut -d, -f1 | sort > "$tmp/eligible"
+          ( list ; cat "$invitedFile" ) | sort | uniq > "$tmp/invited"
+
+           comm -2 -3 "$tmp/eligible" "$tmp/invited"| while read -r id; do
+            add "$id" || true
+          done
+          comm -2 -3 "$tmp/invited" "$tmp/eligible" | while read -r id; do
+            remove "$id" || true
+          done
+
+          sort -o "$invitedFile"{,}
+          git add "$invitedFile"
+          if ! git diff --cached --exit-code; then
+            git commit -m "Update list of invited users"
+            while ! git push; do
+              git pull --rebase
+            done
+          fi
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          ORG: ${{ github.repository_owner }}
+          VOTER_TEAM: ${{ vars.VOTER_TEAM }}

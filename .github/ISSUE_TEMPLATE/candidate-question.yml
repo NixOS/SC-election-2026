@@ -1,0 +1,30 @@
+name: Candidate question
+description: A template to ask a question to a candidate
+title: "[Question summary]"
+labels: ["question"]
+body:
+- type: textarea
+  id: question
+  attributes:
+    label: Question
+    description: |
+      - Look through [existing questions](https://github.com/NixOS/SC-election-2026/issues?q=is%3Aissue+is%3Aopen+label%3Aquestion) to make sure the question has not been asked already.
+      - Please keep the question short, relevant, respectful, and civil.
+      - Do not edit your question, other than minor fixes such as typos.
+      - If you have follow-up questions, you can create another issue.
+      - Do not comment on questions unless you are a candidate/nominee.
+      - If you violate these rules, the EC and moderation team reserve the right to remove violating content and revoke access to this repository.
+    placeholder: "State your question"
+  validations:
+    required: true
+- type: textarea
+  id: candidates-asked
+  attributes:
+    label: "Candidates I'd like to get an answer from"
+    placeholder: |
+      - @username1
+      - @username2
+    description: |
+      - Optionally @-mention a specific candidate or nominee to ask them to answer the question
+      - All nominations can be seen [here](https://github.com/NixOS/SC-election-2026/pulls?q=is%3Apr+label%3Anomination+).
+      - Note that other candidates can also answer.

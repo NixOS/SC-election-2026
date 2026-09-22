@@ -1,0 +1,48 @@
+name: "Nomination PRs"
+
+on:
+  pull_request_target:
+    types: [edited, opened, synchronize, reopened]
+    paths-ignore:
+      - eligible.csv
+  issue_comment:
+    types: [created]
+
+jobs:
+  process:
+    name: check-handle
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/create-github-app-token@v2
+      id: app-token
+      with:
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.PRIVATE_KEY }}
+    - name: Get GitHub App User ID
+      id: get-user-id
+      run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+    - run: |
+        git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+        git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ steps.app-token.outputs.token }}
+    - uses: nixbuild/nix-quick-install-action@v33
+    - name: Process nomination
+      run: nix shell nixpkgs#{pandoc,msmtp} --command scripts/check-nomination.sh
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        REPOSITORY: ${{ github.repository }}
+        NOMINATOR_ID: ${{ github.event.pull_request.user.id || github.event.issue.user.id }}
+        NOMINATOR_LOGIN: ${{ github.event.pull_request.user.login || github.event.issue.user.login }}
+        PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        PR_TITLE: ${{ github.event.pull_request.title || github.event.issue.title }}
+        EVENT: ${{ github.event_name }}
+        HAS_NOMINATION_LABEL: ${{ github.event_name == 'issue_comment' && contains(github.event.issue.labels.*.name, 'nomination') || contains(github.event.pull_request.labels.*.name, 'nomination') }}
+        COMMENTER_ID: ${{ github.event.comment.user.id }}
+        COMMENTER_LOGIN: ${{ github.event.comment.user.login }}
+        COMMENT_IS_ACCEPTANCE: ${{ github.event_name == 'issue_comment' && github.event.comment.performed_via_github_app == null && contains(github.event.comment.body, '!accept') }}
+        COMMENT_IS_ENDORSEMENT: ${{ github.event_name == 'issue_comment' && github.event.comment.performed_via_github_app == null && contains(github.event.comment.body, '!endorse') }}
