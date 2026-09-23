@@ -5,7 +5,7 @@ such that among the nominee and the endorsers, there are at least four people wi
 [conflict of interest](./conflict-of-interest.md).
 
 To endorse a candidate:
-1. Find their open PR among the [unconfirmed nominees](https://github.com/NixOS/SC-election-2025/pulls?q=is%3Apr+is%3Aopen+label%3Anomination+).
+1. Find their open PR among the [unconfirmed nominees](https://github.com/NixOS/SC-election-2026/pulls?q=is%3Apr+is%3Aopen+label%3Anomination+).
    This PR will be merged if there are enough endorsements to satisfy the conflict of interest requirement,
    so if it's still open, the nominee might still need more endorsements.
 2. Reply with a comment containing `!endorse`.
