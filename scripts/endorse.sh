@@ -50,7 +50,7 @@ if [ -z "$endorserEmail" ]; then
 EOF
   exit 0
 fi
-scripts/send-email.sh "$endorserEmail" "Nix SC Election 2025: Endorser conflicts of interest" <<EOF
+scripts/send-email.sh "$endorserEmail" "Nix SC Election 2026: Endorser conflicts of interest" <<EOF
 Hello, @$ENDORSER_LOGIN!
 
 You've indicated that you'd like to endorse a nominee for the Nix Steering Committee.
