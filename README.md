@@ -5,7 +5,7 @@ Nix SC election 2026
 
 The constitution defines a process for automatic voter eligibility based on *the number of commits and merge actions in merged PRs opened by a person in any of the projects inside the NixOS GitHub organisation*. In order to be automatically eligible, you must fulfil *one or more* of the following criteria:
 - authored at least **25** commits
-- merged at least **1** pull request
+- exercised commit access by merging at least **1** pull request
 
 The eligibility window is **the past 4 years** from and to 1 Aug (see table below for exact dates).
 
