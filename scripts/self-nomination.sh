@@ -4,7 +4,7 @@ set -euo pipefail
 nomineeEmail=$1
 nomineeHandle=$2
 
-scripts/send-email.sh "$nomineeEmail" "Nix SC Election 2025: Next steps as a nominee" <<EOF
+scripts/send-email.sh "$nomineeEmail" "Nix SC Election 2026: Next steps as a nominee" <<EOF
 Hello, @$nomineeHandle!
 
 Thank you for [your self-nomination] for the Nix Steering Committee!
