@@ -57,7 +57,9 @@ You've indicated that you'd like to endorse a nominee for the Nix Steering Commi
 
 To complete the endorsement, reply to this email with a disclosure of _all_ your
 potential sources of conflicts of interest.
-This includes, but is not limited to, employers or otherwise payers of Nix work.
+This includes, but is not limited to, employment (even if unrelated to Nix)
+and anyone paying you for Nix work.
+If you have no employer or paid Nix work, please confirm that.
 
 We will use this disclosure to check for conflicts of interest with
 any candidates you endorse but also their other endorsers.
