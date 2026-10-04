@@ -13,10 +13,10 @@ jobs:
     name: check-handle
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/create-github-app-token@v2
+    - uses: actions/create-github-app-token@v3
       id: app-token
       with:
-        app-id: ${{ vars.APP_ID }}
+        client-id: ${{ vars.CLIENT_ID }}
         private-key: ${{ secrets.PRIVATE_KEY }}
     - name: Get GitHub App User ID
       id: get-user-id
