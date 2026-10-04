@@ -10,10 +10,10 @@ jobs:
     name: Automerge
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/create-github-app-token@v2
+    - uses: actions/create-github-app-token@v3
       id: app-token
       with:
-        app-id: ${{ vars.APP_ID }}
+        client-id: ${{ vars.CLIENT_ID }}
         private-key: ${{ secrets.PRIVATE_KEY }}
     - uses: actions/checkout@v7
       with:
