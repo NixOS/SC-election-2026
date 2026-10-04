@@ -20,7 +20,7 @@ jobs:
       with:
         app-id: ${{ vars.APP_ID }}
         private-key: ${{ secrets.PRIVATE_KEY }}
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - run: |
         if ! grep "^$SENDER_ID," eligible.csv; then
           gh api \
