@@ -92,7 +92,7 @@ case "$EVENT" in
 
     if [[ "$COMMENT_IS_ACCEPTANCE" == true ]]; then
       getNominee
-      if test "$nomineeHandle" = "$COMMENTER_LOGIN"; then
+      if [[ "$nomineeHandle" == "$COMMENTER_LOGIN" ]]; then
         scripts/self-nomination.sh "$commenterEmail" "$COMMENTER_LOGIN"
       else
         gh api \
