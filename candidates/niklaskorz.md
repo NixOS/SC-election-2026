@@ -22,7 +22,7 @@ My areas of expertise resolve around Rust, C++ and Node.js packages, but I'm als
 
 This is my second time running in the Steering Committee election, and you can find my last year's statement and answers here:
 <https://github.com/NixOS/SC-election-2025/blob/main/candidates/niklaskorz.md>.
-One of my key points in the last election was transparency
+One of my key points in the last election was transparency.
 I'm delighted that in terms of transparency, most of the points I had run on were actually implemented, which we now see in the form of public SC meeting notes and voting protocols.
 While I do not claim sole credit on this, I would like to believe that my ideas have at least influenced these implementations to some degree.
 
