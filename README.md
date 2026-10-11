@@ -55,18 +55,21 @@ After the question has been posted, only candidates and nominees can respond to 
 | Candidate self-nominations, nominations, acceptances, and endorsements | 2026-09-24 | 2026-10-14 |
 | Submission of questions from eligible voters to candidates | 2026-09-24 | 2026-10-14 |
 | Exception requests      | 2026-09-24              | 2026-10-14              |
-| Candidates' answers to the questions | 2026-09-24 | 2026-10-14              |
-| Voting                  | 2026-10-15              | 2026-11-01              |
+| Candidates' answers to the questions | 2026-09-24 | 2026-10-21              |
+| Voting                  | 2026-10-22              | 2026-11-08              |
+
+The deadline for candidates' answers is 2026-10-21 Anywhere on Earth (AoE, UTC-12).
+Voting opens on 2026-10-22 after that deadline has passed.
 
 We will make an effort to regularly, once per 3 days or more often, upload the later registrations to OpaVote, but this will be manual and not in real time»
 
-Voting end date is 2026-11-01 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
-This means if your (local) clock shows 2026-11-01 or an earlier date you can still vote.
-If your (local) clock shows 2026-11-02 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
+Voting end date is 2026-11-08 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
+This means if your (local) clock shows 2026-11-08 or an earlier date you can still vote.
+If your (local) clock shows 2026-11-09 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
 
 [^timezone-command]: `env TZ=Etc/GMT+12 date --rfc-3339=s` will give you the relvevant AoE time and date.
-As long as *the date portion* still displays 2026-11-01 or earlier this means you can still vote.
-Any time left before the following day (2026-11-02) is the time left for voting.
+As long as *the date portion* still displays 2026-11-08 or earlier this means you can still vote.
+Any time left before the following day (2026-11-09) is the time left for voting.
 
 ## Election Committee (EC)
 
