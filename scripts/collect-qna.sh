@@ -2,114 +2,113 @@
 
 set -euo pipefail
 
+SCRIPT_DIR=$(cd -- "$(dirname -- "$0")" && pwd)
+repository=${REPOSITORY:-NixOS/SC-election-2026}
+# Pass a separate output directory to review the generated files first.
+outputDir=${1:-"$SCRIPT_DIR/../candidates"}
+
+if (( $# > 1 )); then
+  echo "Usage: $0 [output-directory]" >&2
+  exit 1
+fi
+
+command -v gh >/dev/null
+command -v jq >/dev/null
+
+shopt -s nullglob
+files=("$SCRIPT_DIR"/../candidates/*.md)
+if (( ${#files[@]} == 0 )); then
+  echo "No candidate files found" >&2
+  exit 1
+fi
+
 tmp=$(mktemp -d)
-trap 'echo rm -rf "$tmp"' exit
-SCRIPT_DIR=$(dirname "$0")
-
-for file in "$SCRIPT_DIR"/../candidates/*; do
-  basename=$(basename "$file")
-
-  echo -e "\n\n## Q&A\n" >> "$file"
-done
+trap 'rm -rf "$tmp"' EXIT
 
 gh api \
   --method GET \
   --paginate \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/NixOS/SC-election-2025/issues \
+  "/repos/$repository/issues" \
   -f labels=question \
+  -f state=open \
   -f sort=comments |
-  jq -c '.[]' > "$tmp/questions.json"
+  jq -sc 'add | .[] | select(has("pull_request") | not)' > "$tmp/questions.json"
 
-while read -r questionJson; do
+# Fetch every page before preparing any candidate files.
+while IFS= read -r questionJson; do
   number=$(jq -r .number <<< "$questionJson")
-  title=$(jq -r .title <<< "$questionJson")
-  questionUrl=$(jq -r .html_url <<< "$questionJson")
-  question=$(jq -r .body <<< "$questionJson" |
-    awk '
-      {
-        if ($0 ~ "### Question.*") {
-          q=1
-        } else if ($0 ~ "### Candidates.*") {
-          q=0
-        } else {
-          if (q == 1) {
-            print $0
-          }
-        }
-      }')
-
-  echo "Processing question: $title"
-
   gh api \
     --paginate \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    "/repos/NixOS/SC-election-2025/issues/$number/comments" \
-    --jq 'map({ key: .user.login, value: .}) | from_entries' > "$tmp/answers-$number.json"
-
-  for file in "$SCRIPT_DIR"/../candidates/*; do
-    basename=$(basename "$file")
-    # Capitalisation might be off
-    login=$(gh api --cache=1000h /users/"${basename%%.md}" --jq .login)
-    if answerJson=$(jq -e --arg login "$login" '."\($login)"' "$tmp/answers-$number.json"); then
-      answer=$(jq -r '.body' <<< "$answerJson")
-      answerUrl=$(jq -r '.html_url' <<< "$answerJson")
-
-      {
-        echo "### $title ([link]($questionUrl))"
-        echo ""
-        echo "$question"
-        echo ""
-        echo "<details>"
-        echo "<summary>Answer (<a href=\"$answerUrl\">link</a>)</summary>"
-        echo ""
-        echo "$answer"
-        echo "</details>"
-        echo ""
-      } >> "$file"
-    fi
-  done
+    "/repos/$repository/issues/$number/comments" |
+    jq -s 'add | sort_by(.created_at, .id) | group_by(.user.login | ascii_downcase) |
+      map({key: (.[0].user.login | ascii_downcase), value: .}) | from_entries' > "$tmp/answers-$number.json"
 done < "$tmp/questions.json"
 
+for file in "${files[@]}"; do
+  basename=$(basename "$file")
+  login=${basename%.md}
+  login=${login,,}
+  rendered="$tmp/$basename"
+  unanswered="$tmp/unanswered-$basename"
+  : > "$unanswered"
 
-for file in "$SCRIPT_DIR"/../candidates/*; do
-  echo "## Unanswered questions" >> "$file"
+  # Replace a previous generated section when collecting again.
+  if grep -qx '<!-- BEGIN GENERATED Q&A -->' "$file"; then
+    sed '/^<!-- BEGIN GENERATED Q&A -->$/,$d' "$file" > "$rendered"
+  else
+    cat "$file" > "$rendered"
+    printf '\n\n' >> "$rendered"
+  fi
+  printf '<!-- BEGIN GENERATED Q&A -->\n## Q&A\n\n' >> "$rendered"
+
+  while IFS= read -r questionJson; do
+    number=$(jq -r .number <<< "$questionJson")
+    title=$(jq -r .title <<< "$questionJson")
+    questionUrl=$(jq -r .html_url <<< "$questionJson")
+    question=$(jq -r .body <<< "$questionJson" |
+      awk '
+        /^### Question/ { q=1; next }
+        /^### Candidates/ { q=0 }
+        q { print }
+      ')
+
+    if jq -e --arg login "$login" 'has($login)' "$tmp/answers-$number.json" >/dev/null; then
+      {
+        printf '### %s ([link](%s))\n\n%s\n\n' "$title" "$questionUrl" "$question"
+        responseNumber=0
+        while IFS= read -r answerJson; do
+          answer=$(jq -r .body <<< "$answerJson")
+          answerUrl=$(jq -r .html_url <<< "$answerJson")
+          responseNumber=$((responseNumber + 1))
+          label=Answer
+          if (( responseNumber > 1 )); then
+            label="Additional response"
+          fi
+          printf '<details>\n<summary>%s (<a href="%s">link</a>)</summary>\n\n' "$label" "$answerUrl"
+          printf '%s\n\n</details>\n\n' "$answer"
+        done < <(jq -c --arg login "$login" '.[$login][]' "$tmp/answers-$number.json")
+      } >> "$rendered"
+    else
+      summaryTitle=$(jq -r '.title | @html' <<< "$questionJson")
+      printf '<details>\n<summary>%s (<a href="%s">link</a>)</summary>\n\n%s\n\n</details>\n\n' "$summaryTitle" "$questionUrl" "$question" >> "$unanswered"
+    fi
+  done < "$tmp/questions.json"
+
+  {
+    printf '## Unanswered questions\n\n'
+    cat "$unanswered"
+    printf '<!-- END GENERATED Q&A -->\n'
+  } >> "$rendered"
 done
 
-# Again for the unanswered questions
-while read -r questionJson; do
-  number=$(jq -r .number <<< "$questionJson")
-  title=$(jq -r .title <<< "$questionJson")
-  questionUrl=$(jq -r .html_url <<< "$questionJson")
-  question=$(jq -r .body <<< "$questionJson" |
-    awk '
-      {
-        if ($0 ~ "### Question.*") {
-          q=1
-        } else if ($0 ~ "### Candidates.*") {
-          q=0
-        } else {
-          if (q == 1) {
-            print $0
-          }
-        }
-      }')
-
-  echo "Processing question: $title"
-
-  for file in "$SCRIPT_DIR"/../candidates/*; do
-    basename=$(basename "$file")
-    # Capitalisation might be off
-    login=$(gh api --cache=1000h /users/"${basename%%.md}" --jq .login)
-    if ! jq -e --arg login "$login" '."\($login)"' "$tmp/answers-$number.json" >/dev/null; then
-      {
-        echo "<details>"
-        echo "<summary>$title (<a href=\"$questionUrl\">link</a>)</summary>"
-        echo "$question"
-        echo "</details>"
-      } >> "$file"
-    fi
-  done
-done < "$tmp/questions.json"
+# Write files only after all API requests and rendering have succeeded.
+mkdir -p "$outputDir"
+for file in "${files[@]}"; do
+  basename=$(basename "$file")
+  cp "$tmp/$basename" "$outputDir/$basename"
+  echo "Collected Q&A: $outputDir/$basename"
+done
