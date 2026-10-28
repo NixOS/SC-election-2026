@@ -56,20 +56,23 @@ After the question has been posted, only candidates and nominees can respond to 
 | Submission of questions from eligible voters to candidates | 2026-09-24 | 2026-10-14 |
 | Exception requests      | 2026-09-24              | 2026-10-14              |
 | Candidates' answers to the questions | 2026-09-24 | 2026-10-21              |
-| Voting                  | 2026-10-22              | 2026-11-08              |
+| Voting                  | 2026-10-27              | 2026-11-13              |
 
 The deadline for candidates' answers is 2026-10-21 Anywhere on Earth (AoE, UTC-12).
-Voting opens on 2026-10-22 after that deadline has passed.
+
+Voting restarted on 2026-10-27.
+If you voted before the restart, please vote again using the new OpaVote ballot link sent by email.
+See the [restart announcement](https://github.com/NixOS/SC-election-2026/issues/70) for details.
 
 We will make an effort to regularly, once per 3 days or more often, upload the later registrations to OpaVote, but this will be manual and not in real time»
 
-Voting end date is 2026-11-08 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
-This means if your (local) clock shows 2026-11-08 or an earlier date you can still vote.
-If your (local) clock shows 2026-11-09 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
+Voting end date is 2026-11-13 *Anywhere on Earth* (AoE, UTC-12), which is the most delayed timezone.
+This means if your (local) clock shows 2026-11-13 or an earlier date you can still vote.
+If your (local) clock shows 2026-11-14 (one day after the end date) you *may* still be able to vote but you will have to compare timezones[^timezone-command] to be sure.
 
 [^timezone-command]: `env TZ=Etc/GMT+12 date --rfc-3339=s` will give you the relvevant AoE time and date.
-As long as *the date portion* still displays 2026-11-08 or earlier this means you can still vote.
-Any time left before the following day (2026-11-09) is the time left for voting.
+As long as *the date portion* still displays 2026-11-13 or earlier this means you can still vote.
+Any time left before the following day (2026-11-14) is the time left for voting.
 
 ## Election Committee (EC)
 
