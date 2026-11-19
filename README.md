@@ -32,7 +32,7 @@ A non-exhaustive list of examples of contributions:
 
 The outline of the candidate process is as follows:
 - Either [nominate](./doc/nominate.md) yourself or accept a [nomination](./doc/nominate.md) by another person
-- Fill out the [canditate template](./doc/candidate-template.md)
+- Fill out the [candidate template](./doc/candidate-template.md)
 - Receive sufficient [endorsements](./doc/endorse.md) to become a candidate
 
 Please read the linked documentation for in-depth descriptions of the process.
@@ -51,8 +51,8 @@ After the question has been posted, only candidates and nominees can respond to 
 
 | Description             | Start date              | End date                |
 | ----------------------- | ----------------------- | ----------------------- |
-| Contribution window     | 2022-08-01T00:00:01 UTC | 2026-08-01T00:00:01 UTC |
-| Candidate self-nominations, nominations, acceptances, and endorsements | 2026-09-24 | 2026-10-14 |
+| Contribution window     | 2022-08-01T00:00:00 UTC | 2026-08-01T00:00:00 UTC |
+| Candidate nominations, acceptances, statements, and endorsements | 2026-09-24 | 2026-10-14 |
 | Submission of questions from eligible voters to candidates | 2026-09-24 | 2026-10-14 |
 | Exception requests      | 2026-09-24              | 2026-10-14              |
 | Candidates' answers to the questions | 2026-09-24 | 2026-10-21              |

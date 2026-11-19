@@ -6,8 +6,8 @@ such that among the nominee and the endorsers, there are at least four people wi
 
 To endorse a candidate:
 1. Find their open PR among the [unconfirmed nominees](https://github.com/NixOS/SC-election-2026/pulls?q=is%3Apr+is%3Aopen+label%3Anomination+).
-   This PR will be merged if there are enough endorsements to satisfy the conflict of interest requirement,
-   so if it's still open, the nominee might still need more endorsements.
+   This PR will be merged after the EC has checked the candidate statement and confirmed enough endorsements to satisfy the conflict of interest requirement.
+   If it's still open, the nominee might still need to submit their statement or receive more endorsements.
 2. Reply with a comment containing `!endorse`.
    You should receive an automated email to your voter email address,
    asking for disclosure of your conflicts of interest.
